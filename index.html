@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Free Fire Tournament Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Fast Rainbow Animation */
+        @keyframes fastRainbow {
+            0% { border-color: #ff0000; box-shadow: 0 0 12px rgba(255, 0, 0, 0.6); }
+            20% { border-color: #ff8800; box-shadow: 0 0 12px rgba(255, 136, 0, 0.6); }
+            40% { border-color: #ffff00; box-shadow: 0 0 12px rgba(255, 255, 0, 0.6); }
+            60% { border-color: #00ff00; box-shadow: 0 0 12px rgba(0, 255, 0, 0.6); }
+            80% { border-color: #00ffff; box-shadow: 0 0 12px rgba(0, 255, 0, 0.6); }
+            100% { border-color: #ff00ff; box-shadow: 0 0 12px rgba(255, 0, 255, 0.6); }
+        }
+
+        .rainbow-box {
+            border: 3px solid #ff0000;
+            animation: fastRainbow 1s linear infinite;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Card / Portal Style matching notification look */
+        .portal-card {
+            background: #151b2b;
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #00ffff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #a0aec0;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: #0b0f19;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Open Notification style button */
+        .open-btn-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1f293d;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .open-action-btn {
+            background: #3182ce;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Dashboard & Modes */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2d3748;
+        }
+
+        .logout-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .mode-card {
+            background: #151b2b;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .mode-card h2 {
+            font-size: 16px;
+            color: #ffaa00;
+            margin-bottom: 8px;
+        }
+
+        .progress-container {
+            background: #2d3748;
+            border-radius: 5px;
+            height: 8px;
+            width: 100%;
+            overflow: hidden;
+            margin: 10px 0 5px 0;
+        }
+
+        .progress-bar {
+            background: #ff0000;
+            height: 100%;
+            width: 100%;
+            transition: width 1s linear;
+        }
+
+        .timer-text {
+            font-size: 12px;
+            color: #a0aec0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* AI Support */
+        .ai-box {
+            background: #151b2b;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .ai-chat {
+            background: #0b0f19;
+            height: 90px;
+            border-radius: 6px;
+            padding: 8px;
+            overflow-y: auto;
+            font-size: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #2d3748;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- AUTH SCREEN -->
+        <div id="auth-screen" class="screen active">
+            <div class="portal-card rainbow-box">
+                <!-- Notification style header banner -->
+                <div class="open-btn-box">
+                    <div>
+                        <strong style="font-size: 14px; color: #00ffff;">VIP Free Fire Portal</strong>
+                        <div style="font-size: 11px; color: #a0aec0;">টুর্নামেন্ট রেজিস্ট্রেশন চলছে</div>
+                    </div>
+                    <button class="open-action-btn" onclick="scrollToForm()">Join</button>
+                </div>
+                <h1>রজিস্ট্রেশন করুন</h1>
+                <div class="input-group">
+                    <label>আপনার নাম</label>
+                    <input type="text" id="username" placeholder="রাইন">
+                </div>
+                <div class="input-group">
+                    <label>ফ্রি ফায়ার UID</label>
+                    <input type="number" id="uid" placeholder="162433043">
+                </div>
+                <button class="btn" onclick="handleLogin()">প্রবেশ করুন</button>
+            </div>
+        </div>
+
+        <!-- DASHBOARD SCREEN -->
+        <div id="dashboard-screen" class="screen">
+            <div class="portal-card">
+                <div class="header">
+                    <div>
+                        <h3 style="color: #00ffff; font-size: 15px;" id="display-name"></h3>
+                        <small style="color: #a0aec0;" id="display-uid"></small>
+                    </div>
+                    <button class="logout-btn" onclick="handleLogout()">লগআউট</button>
+                </div>
+
+                <!-- 4 Major Modes with Red Progress Bars -->
+                <div class="mode-card rainbow-box">
+                    <h2>1. BR Solo (Bermuda)</h2>
+                    <div class="timer-text">
+                        <span>স্ট্যাটাস: অপেক্ষারত</span>
+                        <span id="timer-1">৬০ সে.</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="bar-1" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <div class="mode-card rainbow-box">
+                    <h2>2. Clash Squad 4v4</h2>
+                    <div class="timer-text">
+                        <span>স্ট্যাটাস: অপেক্ষারত</span>
+                        <span id="timer-2">৪৫ সে.</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="bar-2" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <div class="mode-card rainbow-box">
+                    <h2>3. Lone Wolf 1v1</h2>
+                    <div class="timer-text">
+                        <span>স্ট্যাটাস: অপেক্ষারত</span>
+                        <span id="timer-3">৩০ সে.</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="bar-3" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <div class="mode-card rainbow-box">
+                    <h2>4. Full Map Squad</h2>
+                    <div class="timer-text">
+                        <span>স্ট্যাটাস: অপেক্ষারত</span>
+                        <span id="timer-4">৯০ সে.</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="bar-4" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <!-- 24/7 AI Support -->
+                <div class="ai-box rainbow-box">
+                    <h3 style="color: #00ffff; font-size: 14px; margin-bottom: 5px;">🤖 ২৪/৭ এআই সাপোর্ট</h3>
+                    <div class="ai-chat" id="ai-chat-log">
+                        এআই: হ্যালো! টুর্নামেন্টে কোনো সমস্যা হলে এখানে লিখুন, রাইন ভাইয়ের অ্যাডমিন প্যানেলে চলে যাবে।
+                    </div>
+                    <div style="display: flex; gap: 5px;">
+                        <input type="text" id="ai-input" placeholder="সমস্যা লিখুন..." style="flex:1; padding:8px; background:#0b0f19; border:1px solid #2d3748; color:#fff; border-radius:4px; font-size:12px;">
+                        <button onclick="sendAIssue()" style="padding: 8px 12px; background:#00ffff; color:#0b0f19; border:none; border-radius:4px; font-weight:bold; cursor:pointer; font-size:12px;">পাঠান</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            if(localStorage.getItem('ff_user') && localStorage.getItem('ff_uid')) {
+                showDashboard(localStorage.getItem('ff_user'), localStorage.getItem('ff_uid'));
+            }
+        }
+
+        function scrollToForm() {
+            document.getElementById('username').focus();
+        }
+
+        function handleLogin() {
+            const name = document.getElementById('username').value.trim();
+            const uid = document.getElementById('uid').value.trim();
+            if(!name || !uid) {
+                alert('দয়া করে নাম ও UID দিন!');
+                return;
+            }
+            localStorage.setItem('ff_user', name);
+            localStorage.setItem('ff_uid', uid);
+            showDashboard(name, uid);
+        }
+
+        function showDashboard(name, uid) {
+            document.getElementById('display-name').innerText = 'ইউজার: ' + name;
+            document.getElementById('display-uid').innerText = 'UID: ' + uid;
+            document.getElementById('auth-screen').classList.remove('active');
+            document.getElementById('dashboard-screen').classList.add('active');
+            startTimers();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('ff_user');
+            localStorage.removeItem('ff_uid');
+            location.reload();
+        }
+
+        function startTimers() {
+            let t1 = 60, t2 = 45, t3 = 30, t4 = 90;
+            setInterval(() => {
+                if(t1 > 0) { t1--; document.getElementById('timer-1').innerText = t1 + ' সে.'; document.getElementById('bar-1').style.width = (t1/60)*100 + '%'; }
+                else { document.getElementById('timer-1').innerText = 'LIVE!'; document.getElementById('bar-1').style.width = '0%'; }
+
+                if(t2 > 0) { t2--; document.getElementById('timer-2').innerText = t2 + ' সে.'; document.getElementById('bar-2').style.width = (t2/45)*100 + '%'; }
+                else { document.getElementById('timer-2').innerText = 'LIVE!'; document.getElementById('bar-2').style.width = '0%'; }
+
+                if(t3 > 0) { t3--; document.getElementById('timer-3').innerText = t3 + ' সে.'; document.getElementById('bar-3').style.width = (t3/30)*100 + '%'; }
+                else { document.getElementById('timer-3').innerText = 'LIVE!'; document.getElementById('bar-3').style.width = '0%'; }
+
+                if(t4 > 0) { t4--; document.getElementById('timer-4').innerText = t4 + ' সে.'; document.getElementById('bar-4').style.width = (t4/90)*100 + '%'; }
+                else { document.getElementById('timer-4').innerText = 'LIVE!'; document.getElementById('bar-4').style.width = '0%'; }
+            }, 1000);
+        }
+
+        function sendAIssue() {
+            const input = document.getElementById('ai-input');
+            const chatLog = document.getElementById('ai-chat-log');
+            if(!input.value.trim()) return;
+
+            chatLog.innerHTML += `<br><span style="color:#00ffff;">তুমি:</span> ${input.value}`;
+            
+            let issues = JSON.parse(localStorage.getItem('admin_issues') || '[]');
+            issues.push({text: input.value, time: new Date().toLocaleTimeString()});
+            localStorage.setItem('admin_issues', JSON.stringify(issues));
+
+            setTimeout(() => {
+                chatLog.innerHTML += `<br><span style="color:#ffaa00;">এআই:</span> সমস্যাটি রাইন ভাইয়ের অ্যাডমিন প্যানেলে পাঠানো হয়েছে!`;
+                chatLog.scrollTop = chatLog.scrollHeight;
+            }, 500);
+
+            input.value = '';
+        }
+    </script>
+</body>
+</html>
